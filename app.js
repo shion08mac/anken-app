@@ -172,9 +172,14 @@
       return `<div class="step ${cls}">${name === '社内初稿' ? '初稿' : name}<b>${date ? md(date) : '—'}</b></div>`;
     }).join('');
     const waiting = /確認/.test(t.status);
-    const tag = t.url ? 'a' : 'div';
-    const href = t.url ? ` href="${esc(t.url)}" target="_blank" rel="noopener"` : '';
-    return `<${tag} class="card a-${a}"${href}>
+    const vLabel = t.videoLabel || '完成動画';
+    const links = `<div class="links">
+      ${t.video
+        ? `<a class="lk lk-video" href="${esc(t.video)}" target="_blank" rel="noopener">${vLabel === '動画フォルダ' ? '📁' : '🎬'} ${esc(vLabel)}</a>`
+        : '<span class="lk lk-off">🎬 完成動画なし</span>'}
+      ${t.url ? `<a class="lk lk-sheet" href="${esc(t.url)}" target="_blank" rel="noopener">📄 スプシ</a>` : ''}
+    </div>`;
+    return `<div class="card a-${a}">
       <div class="card-top">
         <span class="act">${known ? `${ICON[a]} ${a}` : '工程未定'}</span>
         <span class="due">${t.due ? mdw(t.due) + 'まで' : ''}</span>
@@ -184,7 +189,8 @@
       <div class="meta"><span class="client">${esc(t.client)}</span><span>${esc(t.tab)}${t.no ? ` #${esc(t.no)}` : ''}</span>
         ${t.status ? `<span class="status ${waiting ? 'wait' : ''}">${esc(t.status)}${waiting ? '（先方待ち）' : ''}</span>` : ''}</div>
       <div class="pipe">${pipe}</div>
-    </${tag}>`;
+      ${links}
+    </div>`;
   }
 
   /* ---------- トースト ---------- */

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14213d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="担当案件">
+<title>担当案件</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <div>
+      <h1>担当案件</h1>
+      <p class="sub" id="updated">読み込み中…</p>
+    </div>
+    <div class="top-btns">
+      <button class="icon-btn" id="btnReload" aria-label="最新を読み込む">⟳</button>
+      <button class="icon-btn" id="btnSettings" aria-label="設定">⚙︎</button>
+    </div>
+  </div>
+  <div class="tiles" id="tiles"></div>
+</header>
+
+<nav class="filters">
+  <div class="seg" id="actionFilter"></div>
+  <div class="chips" id="clientFilter"></div>
+  <div class="view-toggle">
+    <button data-view="due" class="on">期限順</button>
+    <button data-view="client">クライアント別</button>
+  </div>
+</nav>
+
+<main id="list"></main>
+
+<div class="toast" id="toast" hidden></div>
+
+<dialog id="settings">
+  <form method="dialog" class="sheet">
+    <h2>設定</h2>
+    <label>接続コード
+      <textarea id="inCode" rows="3" placeholder="スプシの「一括管理 → 📱 アプリと通知の設定」に出るコードを貼り付け"></textarea>
+    </label>
+    <details>
+      <summary>個別に入力する</summary>
+      <label>API URL<input id="inApi" placeholder="https://script.google.com/macros/s/…/exec"></label>
+      <label>APIキー<input id="inKey"></label>
+      <label>OneSignal App ID<input id="inOs"></label>
+    </details>
+    <div class="btn-row">
+      <button type="button" class="primary" id="btnSave">保存して接続</button>
+    </div>
+
+    <h3>通知</h3>
+    <p class="note">毎日 <b>9:00・12:00・15:00</b> に、その日の「次にやること」が届きます。</p>
+    <p class="note" id="iosHint" hidden>iPhoneは、Safariの共有ボタン →「ホーム画面に追加」で追加したアプリから通知をオンにしてください。</p>
+    <div class="btn-row">
+      <button type="button" class="primary" id="btnNotify">通知をオンにする</button>
+    </div>
+    <p class="note" id="notifyState"></p>
+
+    <h3>スプレッドシート</h3>
+    <div class="btn-row">
+      <button type="button" id="btnRefreshSheet">元シートから今すぐ再集計</button>
+    </div>
+    <p class="note">ふだんはスプシ側が1時間ごとに自動更新しています。</p>
+
+    <div class="btn-row end"><button value="close">閉じる</button></div>
+  </form>
+</dialog>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

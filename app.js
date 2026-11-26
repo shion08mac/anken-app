@@ -5,6 +5,7 @@
   const ACTIONS = ['投稿', '納品', '社内初稿', '撮影'];
   const ICON = { '投稿': '📤', '納品': '📦', '社内初稿': '✏️', '撮影': '🎥' };
   const WD = ['日', '月', '火', '水', '木', '金', '土'];
+  const WM = { '投稿': 'Post', '納品': 'Delivery', '社内初稿': 'Draft', '撮影': 'Shoot' };
   const BASE = location.pathname.replace(/[^/]*$/, '');
   const $ = (s) => document.querySelector(s);
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -103,8 +104,8 @@
       if (t.d === null) return;
       if (t.d < 0) c.over++; else if (t.d === 0) c.today++; else if (t.d <= 3) c.soon++; else if (t.d <= 7) c.week++;
     });
-    const tile = (k, label) => `<button class="tile ${k} ${c[k] ? '' : 'zero'}" data-jump="${k}"><b>${c[k]}</b><span>${label}</span></button>`;
-    $('#tiles').innerHTML = tile('over', '期限切れ') + tile('today', '今日') + tile('soon', '3日以内') + tile('week', '7日以内');
+    const tile = (k, en, ja) => `<button class="tile ${k} ${c[k] ? '' : 'zero'}" data-jump="${k}"><b>${c[k]}</b><span class="en">${en}</span><span class="ja">${ja}</span></button>`;
+    $('#tiles').innerHTML = tile('over', 'Overdue', '期限切れ') + tile('today', 'Today', '今日') + tile('soon', 'Soon', '3日以内') + tile('week', 'Week', '7日以内');
     $('#tiles').querySelectorAll('[data-jump]').forEach((b) => b.onclick = () => {
       const g = document.querySelector(`.g-${b.dataset.jump}`) || document.querySelector('.group');
       if (g) { if (g.tagName === 'DETAILS') g.open = true; g.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
@@ -115,7 +116,7 @@
     const base = all.filter((t) => ui.client === 'all' || t.client === ui.client);
     const n = (a) => base.filter((t) => t.next === a).length;
     const btn = (a, label) => `<button data-a="${a}" class="${ui.action === a ? 'on' : ''}">${label}<span class="n">${a === 'all' ? base.length : n(a)}</span></button>`;
-    $('#actionFilter').innerHTML = btn('all', 'すべて') + ACTIONS.map((a) => btn(a, `${ICON[a]} ${a}`)).join('');
+    $('#actionFilter').innerHTML = btn('all', 'すべて') + ACTIONS.map((a) => btn(a, a)).join('');
     $('#actionFilter').querySelectorAll('button').forEach((b) => b.onclick = () => { ui.action = b.dataset.a; store.set('ui', ui); render(); });
   }
 
@@ -131,19 +132,19 @@
 
   function byDue(tasks) {
     const groups = [
-      { k: 'over', label: '期限切れ', hint: 'ステータスの更新もれも含みます', f: (t) => t.d !== null && t.d < 0, collapsible: true },
-      { k: 'today', label: '今日', f: (t) => t.d === 0 },
-      { k: 'soon', label: '明日〜3日以内', f: (t) => t.d >= 1 && t.d <= 3 },
-      { k: 'week', label: '7日以内', f: (t) => t.d >= 4 && t.d <= 7 },
-      { k: 'later', label: 'それ以降', f: (t) => t.d > 7 },
-      { k: 'none', label: '日付未定', f: (t) => t.d === null },
+      { k: 'over', en: 'Overdue', label: '期限切れ', hint: '更新もれも含む', f: (t) => t.d !== null && t.d < 0, collapsible: true },
+      { k: 'today', en: 'Today', label: '今日', f: (t) => t.d === 0 },
+      { k: 'soon', en: 'Soon', label: '明日〜3日以内', f: (t) => t.d >= 1 && t.d <= 3 },
+      { k: 'week', en: 'This week', label: '7日以内', f: (t) => t.d >= 4 && t.d <= 7 },
+      { k: 'later', en: 'Later', label: 'それ以降', f: (t) => t.d > 7 },
+      { k: 'none', en: 'Undated', label: '日付未定', f: (t) => t.d === null },
     ];
     tasks = [...tasks].sort(sortDue);
     return groups.map((g) => {
       const items = tasks.filter(g.f);
       if (!items.length) return '';
       const open = g.collapsible ? (ui.overOpen ? 'open' : '') : 'open';
-      return `<details class="group g-${g.k}" ${open}><summary>${g.label}<span class="count">${items.length}</span>${g.hint ? `<span class="hint">${g.hint}</span>` : ''}</summary>
+      return `<details class="group g-${g.k}" ${open}><summary><span class="gh-en"><b>${g.en[0]}</b>${g.en.slice(1)}</span><span class="gh-ja">${g.label}</span><span class="count">${items.length}</span>${g.hint ? `<span class="hint">${g.hint}</span>` : ''}${g.collapsible ? '<span class="toggle"></span>' : ''}</summary>
         ${items.map(card).join('')}</details>`;
     }).join('');
   }
@@ -154,7 +155,7 @@
     return [...map.entries()].map(([c, items]) => {
       const over = items.filter((t) => t.d !== null && t.d < 0).length;
       const counts = ACTIONS.map((a) => [a, items.filter((t) => t.next === a).length]).filter((x) => x[1]).map(([a, n]) => `${a}${n}`).join('・');
-      return `<details class="group ${over ? 'g-over' : ''}" open><summary><span class="client-head">${esc(c)}</span><span class="count">${items.length}</span><span class="hint">${counts}${over ? `／超過${over}` : ''}</span></summary>
+      return `<details class="group ${over ? 'g-over' : ''}" open><summary><span class="client-head">${esc(c)}</span><span class="count">${items.length}</span><span class="hint">${counts}${over ? `／超過${over}` : ''}</span><span class="toggle"></span></summary>
         ${items.map(card).join('')}</details>`;
     }).join('');
   }
@@ -175,19 +176,21 @@
     const vLabel = t.videoLabel || '完成動画';
     const links = `<div class="links">
       ${t.video
-        ? `<a class="lk lk-video" href="${esc(t.video)}" target="_blank" rel="noopener">${vLabel === '動画フォルダ' ? '📁' : '🎬'} ${esc(vLabel)}</a>`
-        : '<span class="lk lk-off">🎬 完成動画なし</span>'}
-      ${t.url ? `<a class="lk lk-sheet" href="${esc(t.url)}" target="_blank" rel="noopener">📄 スプシ</a>` : ''}
+        ? `<a class="lk lk-video" href="${esc(t.video)}" target="_blank" rel="noopener">${esc(vLabel)}<i>→</i></a>`
+        : '<span class="lk lk-off">完成動画なし</span>'}
+      ${t.url ? `<a class="lk" href="${esc(t.url)}" target="_blank" rel="noopener">スプシ<i>→</i></a>` : ''}
     </div>`;
     return `<div class="card a-${a}">
-      <div class="card-top">
-        <span class="act">${known ? `${ICON[a]} ${a}` : '工程未定'}</span>
+      <span class="tab">${known ? a : '工程未定'}</span>
+      <span class="wm">${WM[a] || ''}</span>
+      <div class="card-head">
         <span class="due">${t.due ? mdw(t.due) + 'まで' : ''}</span>
         <span class="days ${dl.c}">${dl.t}</span>
       </div>
       <div class="title">${esc(t.title)}</div>
-      <div class="meta"><span class="client">${esc(t.client)}</span><span>${esc(t.tab)}${t.no ? ` #${esc(t.no)}` : ''}</span>
-        ${t.status ? `<span class="status ${waiting ? 'wait' : ''}">${esc(t.status)}${waiting ? '（先方待ち）' : ''}</span>` : ''}</div>
+      <p class="client">${esc(t.client)}</p>
+      <div class="tags"><span class="tag">${esc(t.tab)}${t.no ? ` #${esc(t.no)}` : ''}</span>
+        ${t.status ? `<span class="tag ${waiting ? 'wait' : ''}">${esc(t.status)}${waiting ? '・先方待ち' : ''}</span>` : ''}</div>
       <div class="pipe">${pipe}</div>
       ${links}
     </div>`;

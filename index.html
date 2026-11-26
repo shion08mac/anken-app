@@ -3,37 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#14213d">
+<meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="担当案件">
 <title>担当案件</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Sans:wght@300;400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
 <header class="top">
   <div class="top-row">
-    <div>
-      <h1>担当案件</h1>
-      <p class="sub" id="updated">読み込み中…</p>
+    <div class="brand">
+      <h1><b>T</b>asks</h1>
+      <p class="ja">担当案件の、次にやること</p>
     </div>
     <div class="top-btns">
       <button class="icon-btn" id="btnReload" aria-label="最新を読み込む">⟳</button>
       <button class="icon-btn" id="btnSettings" aria-label="設定">⚙︎</button>
     </div>
   </div>
+  <p class="sub" id="updated">読み込み中…</p>
   <div class="tiles" id="tiles"></div>
 </header>
+<div class="rainbow"></div>
 
 <nav class="filters">
-  <div class="seg" id="actionFilter"></div>
-  <div class="chips" id="clientFilter"></div>
-  <div class="view-toggle">
-    <button data-view="due" class="on">期限順</button>
-    <button data-view="client">クライアント別</button>
+  <div class="filters-in">
+    <div class="seg" id="actionFilter"></div>
+    <div class="chips" id="clientFilter"></div>
+    <div class="view-toggle">
+      <button data-view="due" class="on">期限順</button>
+      <button data-view="client">クライアント別</button>
+    </div>
   </div>
 </nav>
 
@@ -43,7 +50,7 @@
 
 <dialog id="settings">
   <form method="dialog" class="sheet">
-    <h2>設定</h2>
+    <h2><b>S</b>ettings</h2>
     <label>接続コード
       <textarea id="inCode" rows="3" placeholder="スプシの「一括管理 → 📱 アプリと通知の設定」に出るコードを貼り付け"></textarea>
     </label>

@@ -1,7 +1,7 @@
 // プッシュ通知（OneSignal）＋オフライン表示用のキャッシュ
 importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-const VERSION = 'anken-v1';
+const VERSION = 'anken-v2';
 const SHELL = ['./', 'index.html', 'app.css', 'app.js', 'config.js', 'manifest.webmanifest',
   'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 

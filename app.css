@@ -166,8 +166,23 @@ dialog::backdrop { background: rgba(0,0,0,.4); }
 .sheet button, .empty button { border: 1px solid var(--border-btn); background: var(--card); padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; }
 .sheet button.primary, .empty button.primary { background: var(--ink); border-color: var(--ink); color: var(--bg); }
 
-/* ---------- 起動アニメーション ---------- */
-.splash { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; background: var(--bg); transition: opacity .5s ease, visibility .5s; }
-.splash-mark { width: 116px; height: 116px; transition: transform .6s cubic-bezier(.3,0,.2,1); }
-.splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
-.splash.hide .splash-mark { transform: scale(1.08); }
+/* ---------- 起動アニメーション（任の書き順） ---------- */
+.splash { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; background: var(--bg); animation: splashOut .5s ease 2.92s forwards; }
+.splash.hide { animation: splashOut .45s ease forwards; }
+@keyframes splashOut { to { opacity: 0; visibility: hidden; } }
+.splash-mark { position: relative; width: 116px; height: 116px; }
+.splash-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.splash-mark > svg:not(.splash-defs) { position: absolute; inset: 0; width: 100%; height: 100%; }
+@keyframes sk0{from{-webkit-clip-path:polygon(27.98% 27.19%, 72.61% 71.82%, 72.61% 71.82%, 27.98% 27.19%);clip-path:polygon(27.98% 27.19%, 72.61% 71.82%, 72.61% 71.82%, 27.98% 27.19%)}to{-webkit-clip-path:polygon(27.98% 27.19%, 72.61% 71.82%, 19.24% 125.20%, -25.39% 80.57%);clip-path:polygon(27.98% 27.19%, 72.61% 71.82%, 19.24% 125.20%, -25.39% 80.57%)}}
+.splash .s0{-webkit-clip-path:polygon(27.98% 27.19%, 72.61% 71.82%, 72.61% 71.82%, 27.98% 27.19%);clip-path:polygon(27.98% 27.19%, 72.61% 71.82%, 72.61% 71.82%, 27.98% 27.19%);animation:sk0 0.34s cubic-bezier(.45,0,.25,1) 0.25s both}
+@keyframes sk1{from{-webkit-clip-path:polygon(3.55% 51.87%, 66.67% 51.87%, 66.67% 51.87%, 3.55% 51.87%);clip-path:polygon(3.55% 51.87%, 66.67% 51.87%, 66.67% 51.87%, 3.55% 51.87%)}to{-webkit-clip-path:polygon(3.55% 51.87%, 66.67% 51.87%, 66.67% 103.75%, 3.55% 103.75%);clip-path:polygon(3.55% 51.87%, 66.67% 51.87%, 66.67% 103.75%, 3.55% 103.75%)}}
+.splash .s1{-webkit-clip-path:polygon(3.55% 51.87%, 66.67% 51.87%, 66.67% 51.87%, 3.55% 51.87%);clip-path:polygon(3.55% 51.87%, 66.67% 51.87%, 66.67% 51.87%, 3.55% 51.87%);animation:sk1 0.26s cubic-bezier(.45,0,.25,1) 0.66s both}
+@keyframes sk2{from{-webkit-clip-path:polygon(75.42% -19.57%, 126.15% 17.99%, 126.15% 17.99%, 75.42% -19.57%);clip-path:polygon(75.42% -19.57%, 126.15% 17.99%, 126.15% 17.99%, 75.42% -19.57%)}to{-webkit-clip-path:polygon(75.42% -19.57%, 126.15% 17.99%, 75.48% 86.44%, 24.75% 48.89%);clip-path:polygon(75.42% -19.57%, 126.15% 17.99%, 75.48% 86.44%, 24.75% 48.89%)}}
+.splash .s2{-webkit-clip-path:polygon(75.42% -19.57%, 126.15% 17.99%, 126.15% 17.99%, 75.42% -19.57%);clip-path:polygon(75.42% -19.57%, 126.15% 17.99%, 126.15% 17.99%, 75.42% -19.57%);animation:sk2 0.36s cubic-bezier(.45,0,.25,1) 0.99s both}
+@keyframes sk3{from{-webkit-clip-path:polygon(65.34% 105.05%, 39.19% 47.61%, 39.19% 47.61%, 65.34% 105.05%);clip-path:polygon(65.34% 105.05%, 39.19% 47.61%, 39.19% 47.61%, 65.34% 105.05%)}to{-webkit-clip-path:polygon(65.34% 105.05%, 39.19% 47.61%, 90.41% 24.29%, 116.56% 81.74%);clip-path:polygon(65.34% 105.05%, 39.19% 47.61%, 90.41% 24.29%, 116.56% 81.74%)}}
+.splash .s3{-webkit-clip-path:polygon(65.34% 105.05%, 39.19% 47.61%, 39.19% 47.61%, 65.34% 105.05%);clip-path:polygon(65.34% 105.05%, 39.19% 47.61%, 39.19% 47.61%, 65.34% 105.05%);animation:sk3 0.3s cubic-bezier(.45,0,.25,1) 1.42s both}
+@keyframes sk4{from{-webkit-clip-path:polygon(44.89% 12.03%, 108.01% 12.03%, 108.01% 12.03%, 44.89% 12.03%);clip-path:polygon(44.89% 12.03%, 108.01% 12.03%, 108.01% 12.03%, 44.89% 12.03%)}to{-webkit-clip-path:polygon(44.89% 12.03%, 108.01% 12.03%, 108.01% 103.75%, 44.89% 103.75%);clip-path:polygon(44.89% 12.03%, 108.01% 12.03%, 108.01% 103.75%, 44.89% 103.75%)}}
+.splash .s4{-webkit-clip-path:polygon(44.89% 12.03%, 108.01% 12.03%, 108.01% 12.03%, 44.89% 12.03%);clip-path:polygon(44.89% 12.03%, 108.01% 12.03%, 108.01% 12.03%, 44.89% 12.03%);animation:sk4 0.34s cubic-bezier(.45,0,.25,1) 1.79s both}
+@keyframes sk5{from{-webkit-clip-path:polygon(52.66% 123.08%, 52.66% 59.96%, 52.66% 59.96%, 52.66% 123.08%);clip-path:polygon(52.66% 123.08%, 52.66% 59.96%, 52.66% 59.96%, 52.66% 123.08%)}to{-webkit-clip-path:polygon(52.66% 123.08%, 52.66% 59.96%, 103.35% 59.96%, 103.35% 123.08%);clip-path:polygon(52.66% 123.08%, 52.66% 59.96%, 103.35% 59.96%, 103.35% 123.08%)}}
+.splash .s5{-webkit-clip-path:polygon(52.66% 123.08%, 52.66% 59.96%, 52.66% 59.96%, 52.66% 123.08%);clip-path:polygon(52.66% 123.08%, 52.66% 59.96%, 52.66% 59.96%, 52.66% 123.08%);animation:sk5 0.3s cubic-bezier(.45,0,.25,1) 2.20s both}
+@media (prefers-reduced-motion: reduce) { .splash .s0,.splash .s1,.splash .s2,.splash .s3,.splash .s4,.splash .s5 { animation: none; -webkit-clip-path: none; clip-path: none; } .splash { animation-delay: .6s; } }
